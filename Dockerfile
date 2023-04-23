@@ -7,5 +7,6 @@ RUN mvn clean install
 
 FROM openjdk:17-jdk-slim
 EXPOSE 8080
-COPY --from=build /home/target/SpringDocker-0.0.1-SNAPSHOT.jar /home
-ENTRYPOINT ['java','-jar','/home/SpringDocker-0.0.1-SNAPSHOP.jar']
+COPY --from=build /home/target/SpringDocker-0.0.1-SNAPSHOT.jar /deploy/app.jar
+WORKDIR /deploy
+ENTRYPOINT ["java", "-jar", "app.jar"]
