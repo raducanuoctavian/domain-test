@@ -17,19 +17,21 @@ pipeline {
         
         stage('Docker Build') {
             steps {
-                sh 'docker build -t spring:latest .'
-            }
+				script {
+						try {
+							sh 'docker rm -f springApp'
+						}
+						catch(Exception e) {
+							echo 'n-am gasit aplicatia pornita boss, pacat...'
+						}  
+					sh 'docker build -t spring:latest .'
+				}
+			}
         }
         
         stage('Publish Artifacts') {
             steps {
-                script {
-                    try {
-                        sh 'docker rm -f springApp'
-                    }
-                    catch(Exception e) {
-                        echo 'n-am gasit aplicatia pornita boss, pacat...'
-                    }                    
+                script {                  
                     sh 'docker run -d --name spingApp -p 9080:8080 -v /home/tayfy/spring_logs:/deploy/logs spring:latest'
                 }
             }
