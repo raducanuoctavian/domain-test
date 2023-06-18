@@ -1,3 +1,4 @@
+#!groovy​
 pipeline {
     agent {
       label 'builder'
@@ -19,11 +20,11 @@ pipeline {
             steps {
 				script {
 						try {
-							sh 'docker rm -f springApp'
+							sh 'docker image rm spring:latest'
 						}
-						catch(Exception e) {
-							echo 'n-am gasit aplicatia pornita boss, pacat...'
-						}  
+						catch (Exception e) {
+							echo 'n-am imagine boss...'
+						}
 					sh 'docker build -t spring:latest .'
 				}
 			}
@@ -31,7 +32,13 @@ pipeline {
         
         stage('Publish Artifacts') {
             steps {
-                script {                  
+                script {
+						try {
+							sh 'docker rm -f springApp'
+						}
+						catch (Exception e) {
+							echo 'n-am gasit aplicatia pornita boss, pacat...'
+						}
                     sh 'docker run -d --name springApp -p 9080:8080 -v /home/tayfy/spring_logs:/deploy/logs spring:latest'
                 }
             }
