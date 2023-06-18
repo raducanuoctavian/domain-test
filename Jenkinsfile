@@ -23,13 +23,15 @@ pipeline {
         
         stage('Publish Artifacts') {
             steps {
-                try {
-                    sh 'docker rm -f springApp'
+                script {
+                    try {
+                        sh 'docker rm -f springApp'
+                    }
+                    catch(Exception e) {
+                        echo 'n-am gasit aplicatia pornita boss, pacat...'
+                    }                    
+                    sh 'docker run -d --name spingApp -p 9080:8080 -v /home/tayfy/spring_logs:/deploy/logs spring:latest'
                 }
-                catch(Exception e) {
-                    echo 'n-am gasit aplicatia pornita boss, pacat...'
-                }                    
-                sh 'docker run -d --name spingApp -p 9080:8080 -v /home/tayfy/spring_logs:/deploy/logs spring:latest'
             }
         }
     }
